@@ -16,24 +16,20 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install Vulkan SDK dependencies
+    - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt install -y wget curl lsb-release gnupg
+        sudo apt install -y wget curl lsb-release gnupg software-properties-common cmake build-essential
 
-    - name: Add Vulkan repository
+    - name: Add LunarG Vulkan SDK repository
       run: |
-        sudo apt install -y software-properties-common
-        sudo add-apt-repository ppa:kisak/kisak-mesa
+        curl -fsSL https://packages.lunarg.com/lunarg-signing-key.asc | gpg --dearmor -o /usr/share/keyrings/lunarg-archive-keyring.gpg
+        echo "deb [signed-by=/usr/share/keyrings/lunarg-archive-keyring.gpg] https://packages.lunarg.com/vulkan/ubuntu $(lsb_release -c | awk '{print $2}') main" | sudo tee /etc/apt/sources.list.d/lunarg-vulkan.list
 
     - name: Install Vulkan SDK
       run: |
         sudo apt update
-        sudo apt install -y vulkan-utils
-
-    - name: Install build dependencies
-      run: |
-        sudo apt install -y cmake build-essential
+        sudo apt install -y vulkan-sdk
 
     - name: Configure CMake
       run: |
