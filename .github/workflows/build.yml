@@ -21,16 +21,15 @@ jobs:
         sudo apt update
         sudo apt install -y wget curl lsb-release gnupg
 
-    - name: Add Vulkan SDK repository
+    - name: Add Vulkan repository
       run: |
         sudo apt install -y software-properties-common
-        curl -fsSL https://packages.lunarg.com/lunarg-signing-key.asc | gpg --dearmor -o /usr/share/keyrings/lunarg-archive-keyring.gpg
-        echo "deb [signed-by=/usr/share/keyrings/lunarg-archive-keyring.gpg] https://packages.lunarg.com/vulkan/ubuntu $(lsb_release -c | awk '{print $2}') main" | sudo tee /etc/apt/sources.list.d/lunarg-vulkan.list
+        sudo add-apt-repository ppa:kisak/kisak-mesa
 
     - name: Install Vulkan SDK
       run: |
         sudo apt update
-        sudo apt install -y vulkan-sdk
+        sudo apt install -y vulkan-utils
 
     - name: Install build dependencies
       run: |
