@@ -15,7 +15,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake g++ pkg-config vulkan-utils
+          sudo apt-get install -y build-essential cmake g++ pkg-config
 
       - name: Build Vulkan WSI Layer
         run: |
