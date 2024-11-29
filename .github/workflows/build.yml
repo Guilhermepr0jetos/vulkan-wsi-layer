@@ -23,8 +23,9 @@ jobs:
 
     - name: Add Vulkan SDK repository
       run: |
-        wget -qO - https://packages.lunarg.com/lunarg-signing-key.asc | sudo apt-key add -
-        sudo apt-add-repository "deb https://packages.lunarg.com/vulkan/ubuntu $(lsb_release -c | awk '{print $2}') main"
+        sudo apt install -y software-properties-common
+        curl -fsSL https://packages.lunarg.com/lunarg-signing-key.asc | gpg --dearmor -o /usr/share/keyrings/lunarg-archive-keyring.gpg
+        echo "deb [signed-by=/usr/share/keyrings/lunarg-archive-keyring.gpg] https://packages.lunarg.com/vulkan/ubuntu $(lsb_release -c | awk '{print $2}') main" | sudo tee /etc/apt/sources.list.d/lunarg-vulkan.list
 
     - name: Install Vulkan SDK
       run: |
