@@ -16,12 +16,22 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Vulkan SDK
+    - name: Install Vulkan SDK dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y wget curl lsb-release gnupg
+
+    - name: Add Vulkan SDK repository
+      run: |
+        wget -qO - https://packages.lunarg.com/lunarg-signing-key.asc | sudo apt-key add -
+        sudo apt-add-repository "deb https://packages.lunarg.com/vulkan/ubuntu $(lsb_release -c | awk '{print $2}') main"
+
+    - name: Install Vulkan SDK
       run: |
         sudo apt update
         sudo apt install -y vulkan-sdk
 
-    - name: Install dependencies
+    - name: Install build dependencies
       run: |
         sudo apt install -y cmake build-essential
 
