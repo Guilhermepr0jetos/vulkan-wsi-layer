@@ -1,0 +1,42 @@
+name: Build Vulkan WSI Layer
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Vulkan SDK
+      run: |
+        sudo apt update
+        sudo apt install -y vulkan-sdk
+
+    - name: Install dependencies
+      run: |
+        sudo apt install -y cmake build-essential
+
+    - name: Configure CMake
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+
+    - name: Build the project
+      run: |
+        cd build
+        make -j$(nproc)
+
+    - name: Run tests (optional)
+      run: |
+        cd build
+        make test
