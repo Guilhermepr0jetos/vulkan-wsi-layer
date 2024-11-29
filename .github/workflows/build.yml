@@ -1,0 +1,47 @@
+name: Vulkan WSI Layer CI
+
+on:
+  push: # Trigger em qualquer push
+  pull_request: # Opcional: Executa também em PRs
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Vulkan SDK
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y vulkan-utils
+          # Ajuste se necessário para instalar o Vulkan SDK corretamente
+
+      - name: Set up CMake
+        uses: actions/setup-cmake@v3
+        with:
+          cmake-version: '3.18.0'
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get install -y cmake g++ pkg-config
+          git clone https://github.com/KhronosGroup/Vulkan-Loader.git
+          mkdir Vulkan-Loader/build
+          cd Vulkan-Loader/build
+          ../scripts/update_deps.py
+          cmake -C helper.cmake ..
+          make
+          sudo make install
+
+      - name: Build the Vulkan Layer
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          make
+
+      - name: Run Tests
+        run: |
+          # Adicione aqui seus testes
+          echo "Running tests..."
